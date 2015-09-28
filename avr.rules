@@ -1,0 +1,20 @@
+ALLC=$(wildcard *.c)
+ALL=$(ALLC:.c=.o)
+DEP=$(ALL:.o=.d)
+BASEDIR=.
+
+CC= avr-gcc -Wall -mmcu=atmega328p -std=gnu99
+check := $(shell cat .TYPE)
+
+
+ifeq ($(check),debug)
+	FLAGS= -O0 -g
+else ifeq ($(check),programming)
+	FLAGS= -Os -DF_CPU=20000000
+else
+	FLAGS=
+endif
+
+%.o: %.c
+	$(CC) -c -o $@ $<
+	$(CC) -M $(FLAGS) $< | sed 's/:/: .TYPE/' > $*.d
