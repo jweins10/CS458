@@ -1,10 +1,13 @@
 include avr.rules
 
-main: $(ALL)
+test: $(CCODE)
+	$(CC) $(FLAGS) $< -o $@
+
+code.hex: $(ALL)
 	$(CC) $(FLAGS) $< -o $@
 
 clean: 
-	rm -f *.o *.d
+	rm -f code.hex test *.o *.d
 
 -include $(DEP)
 

@@ -3,9 +3,9 @@
 MAKE=/usr/bin/make
 basedir=.
 
-if [ $# -ne 1 ] ; then
-	echo "Format is "avrmake flag""
-	echo "Type flag as -d for debug"
+if [ $# -ne 1 ]  || [ $# -ne 2 ] ; then
+	echo "Format is "avrmake -flag""
+	echo "Type flag as -d for debug, then type file name"
 	echo "Type flag as -p for programming"
 fi
 
@@ -17,13 +17,19 @@ while getopts "dp" opt ; do
 	case $opt in
 	d)
 	 echo "Set to debug mode" >&2
-	 echo "debug" >> .TYPE
+	 type=debug
+	 echo ${type} >> .TYPE
 	 ;;
 	p)
 	 echo "Set to programming mode" >&2
-	 echo "programming" >> .TYPE
+	 type=programming
+	 echo ${type} >> .TYPE
 	 ;;
 	esac
 done
 
-${MAKE} -f makefile main > /dev/null
+if [ ${type} == debug ] ; then
+	${MAKE} CCODE=$2 -f makefile test
+elif [ ${type} == programming ] ; then
+	${MAKE} -f makefile code.hex
+fi 
