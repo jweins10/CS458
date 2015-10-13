@@ -1,6 +1,7 @@
 ALLC=$(wildcard *.c)
 ALL=$(ALLC:.c=.o)
 DEP=$(ALL:.o=.d)
+F_CPU=20000000
 BASEDIR=.
 
 CC= avr-gcc -Wall -mmcu=atmega328p -std=gnu99
@@ -10,7 +11,7 @@ check := $(shell cat .TYPE)
 ifeq ($(check),debug)
 	FLAGS= -O0 -g
 else ifeq ($(check),programming)
-	FLAGS= -Os -DF_CPU=20000000
+	FLAGS= -O0 -DF_CPU=$(F_CPU)
 else
 	FLAGS=
 endif

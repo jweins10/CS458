@@ -8,10 +8,6 @@ if [ $# -ne 1 ]  || [ $# -ne 2 ] ; then
 	echo "Type flag as -d for debug, then type file name"
 	echo "Type flag as -p for programming"
 fi
-
-if [ -s .TYPE ] ; then
-	rm -f .TYPE
-fi
   
 while getopts "dp" opt ; do
 	case $opt in
@@ -29,7 +25,7 @@ while getopts "dp" opt ; do
 done
 
 if [ ${type} == debug ] ; then
-	${MAKE} CCODE=$2 -f makefile test
+	${MAKE} CCODE=$2 -f makefile debug.code
 elif [ ${type} == programming ] ; then
-	${MAKE} -f makefile code.hex
+	${MAKE} -f makefile program
 fi 
